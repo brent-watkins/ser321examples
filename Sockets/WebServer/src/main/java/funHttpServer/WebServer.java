@@ -238,19 +238,27 @@ class WebServer {
           String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
           System.out.println(json);
 
-          JSONArray repos = new JSONArray(json);
+          try {
+            JSONArray reposArray = new JSONArray(json);
 
-          for(int i = 0; i < repos.length(); i++) {
-            JSONObject repoOwner = repos.getJSONObject("owner");
-            String ownerName = repoOwner.getString("login");
-            builder.append(ownerName + ":");
+            for(int i = 0; i < reposArray.length(); i++) {
+              JSONObject repo = reposArray.getJSONObject(i);
 
-            String repoName = repos.getString("name");
-            builder.append(repoName);
+              JSONObject repoOwner = repo.getJSONObject("owner");
+              String ownerName = repoOwner.getString("login");
+              builder.append(ownerName + ":");
 
-            String repoID = repos.getString("id");
-            builder.append("ID #" + repoID);
+              String repoName = repo.getString("name");
+              builder.append(repoName);
+
+              String repoID = repo.getString("id");
+              builder.append("ID #" + repoID);
+            }
           }
+          catch (Exception e) {
+            e.printStackTrace();
+          }
+          
            
 
           builder.append("Check the todos mentioned in the Java source file");

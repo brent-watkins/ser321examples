@@ -8,10 +8,9 @@ repositories {
   mavenCentral()
 }
 
-dependencies {
-  compile 'org.json:json:20201115'
+dependencies{
+  compile 'org.json:json:20171018' // org.json
 }
-
 
 task SimpleWebServer(type: JavaExec) {
   group 'http'
