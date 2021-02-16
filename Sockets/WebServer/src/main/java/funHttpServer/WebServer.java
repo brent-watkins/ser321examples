@@ -253,6 +253,10 @@ class WebServer {
 
               int repoID = repo.getInt("id");
               builder.append("ID #" + repoID);
+
+              builder.append("HTTP/1.1 200 OK\n");
+              builder.append("Content-Type: text/html; charset=utf-8\n");
+              builder.append("\n");
             }
           }
           catch (Exception e) {
@@ -263,9 +267,7 @@ class WebServer {
 
           builder.append("Check the todos mentioned in the Java source file");
 
-          builder.append("HTTP/1.1 200 OK\n");
-          builder.append("Content-Type: text/html; charset=utf-8\n");
-          builder.append("\n");
+
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response
           // and list the owner name, owner id and name of the public repo on your webpage, e.g.
