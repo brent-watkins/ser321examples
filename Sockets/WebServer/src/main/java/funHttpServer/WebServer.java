@@ -238,6 +238,9 @@ class WebServer {
           String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
           System.out.println(json);
 
+          builder.append("HTTP/1.1 200 OK\n");
+          builder.append("Content-Type: text/html; charset=utf-8\n");
+          builder.append("\n");
           try {
             JSONArray reposArray = new JSONArray(json);
 
@@ -253,20 +256,11 @@ class WebServer {
 
               int repoID = repo.getInt("id");
               builder.append("ID #" + repoID);
-
-              builder.append("HTTP/1.1 200 OK\n");
-              builder.append("Content-Type: text/html; charset=utf-8\n");
-              builder.append("\n");
             }
           }
           catch (Exception e) {
             e.printStackTrace();
           }
-          
-           
-
-          builder.append("Check the todos mentioned in the Java source file");
-
 
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response
