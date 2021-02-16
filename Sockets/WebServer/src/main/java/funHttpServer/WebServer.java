@@ -18,6 +18,7 @@ package funHttpServer;
 
 import java.io.*;
 import java.net.*;
+import org.json.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -201,19 +202,9 @@ class WebServer {
           // extract path parameters
           query_pairs = splitQuery(request.replace("multiply?", ""));
 
-          try {
           // extract required fields from parameters
           Integer num1 = Integer.parseInt(query_pairs.get("num1"));
           Integer num2 = Integer.parseInt(query_pairs.get("num2"));
-          }
-          catch (Exception e) {
-            e.printStackTrace();
-
-            builder.append("HTTP/1.1 400 Bad Request\n");
-            builder.append("Content-Type: text/html; charset=utf-8\n");
-            builder.append("\n");
-            builder.append("Please enter two integer values to multiply.");
-          }
 
           // do math
           Integer result = num1 * num2;
@@ -227,6 +218,11 @@ class WebServer {
 
           // TODO: Include error handling here with a correct error code and
           // a response that makes sense
+          /*  builder.append("HTTP/1.1 400 Bad Request\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("Please enter two integer values to multiply.");
+          */
 
         } else if (request.contains("github?")) {
           // pulls the query from the request and runs it with GitHub's REST API
@@ -242,7 +238,26 @@ class WebServer {
           String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
           System.out.println(json);
 
+          JSONArray repos = new JSONArray(json);
+
+          for(int i = 0; i < repos.length(); i++) {
+            JSONObject repoOwner = repos.getJSONObject("owner");
+            String ownerName = repoOwner.getString("login");
+            builder.append(ownerName + ":");
+
+            String repoName = repos.getString("name");
+            builder.append(repoName);
+
+            String repoID = repos.getString("id");
+            builder.append("ID #" + repoID);
+          }
+           
+
           builder.append("Check the todos mentioned in the Java source file");
+
+          builder.append("HTTP/1.1 200 OK\n");
+          builder.append("Content-Type: text/html; charset=utf-8\n");
+          builder.append("\n");
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response
           // and list the owner name, owner id and name of the public repo on your webpage, e.g.
