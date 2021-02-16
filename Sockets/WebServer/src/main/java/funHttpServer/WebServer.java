@@ -251,7 +251,7 @@ class WebServer {
               String repoName = repo.getString("name");
               builder.append(repoName);
 
-              Integer repoID = repo.getInteger("id");
+              String repoID = repo.getAsString("id");
               builder.append("ID #" + repoID);
             }
           }
